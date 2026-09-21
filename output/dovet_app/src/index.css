@@ -152,6 +152,13 @@ h1 { font-weight: 700; }
 h2 { font-weight: 700; }
 h3 { font-weight: 600; }
 
+/* Keep fields in the enrollment grids aligned when labels wrap. */
+.enrollment-form .space-y-1\.5 > label {
+  min-height: 2rem;
+  display: flex;
+  align-items: flex-end;
+}
+
 /* Figma-Grade Smooth Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

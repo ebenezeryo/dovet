@@ -51,7 +51,7 @@ export const AdminDashboard = () => {
       <div className="flex">
         {/* Sidebar */}
         <aside className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 border-r border-slate-200/70 transform transition-transform duration-200 lg:translate-x-0 lg:static",
+          "fixed inset-y-0 left-0 z-50 w-72 shrink-0 border-r border-slate-200/70 transform transition-transform duration-200 lg:translate-x-0 lg:static",
           isSidebarOpen ? "translate-x-0 shadow-xl" : "-translate-x-full"
         )} style={{ backgroundColor: '#ffffff' }}>
           <div className="flex h-full flex-col">
@@ -83,14 +83,14 @@ export const AdminDashboard = () => {
                     to={item.href}
                     onClick={() => setIsSidebarOpen(false)}
                     className={cn(
-                      "flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all",
+                      "flex items-center gap-3 whitespace-nowrap px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all",
                       isActive
                         ? "bg-slate-900 text-white shadow-xs"
                         : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                     )}
                   >
-                    <item.icon className={cn("h-4 w-4", isActive ? "text-[#73D99F]" : "text-slate-400")} />
-                    {item.name}
+                    <item.icon className={cn("h-4 w-4 shrink-0", isActive ? "text-[#73D99F]" : "text-slate-400")} />
+                    <span>{item.name}</span>
                   </Link>
                 );
               })}

@@ -238,36 +238,36 @@ export function StudentModal({
           </div>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6 pt-2">
+        <form onSubmit={handleSubmit} className="enrollment-form space-y-6 pt-2">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-2 sm:grid-cols-4 w-full bg-slate-100/90 p-1 rounded-2xl h-auto gap-1">
+            <TabsList className="grid grid-cols-2 xl:grid-cols-4 w-full bg-slate-100/90 p-1 rounded-2xl h-auto gap-1.5">
               <TabsTrigger
                 value="academic"
-                className="rounded-xl text-xs font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 flex items-center justify-center gap-1.5"
+                className="min-w-0 h-auto min-h-12 !whitespace-normal rounded-xl text-xs font-bold leading-tight data-[state=active]:bg-white data-[state=active]:shadow-sm px-2 py-2.5 flex items-center justify-center gap-1.5"
               >
                 <GraduationCap className="h-3.5 w-3.5 text-[#3C594E]" />
-                <span className="truncate">1. Academic & Identity</span>
+                <span className="block text-center !whitespace-normal">1. Academic & Identity</span>
               </TabsTrigger>
               <TabsTrigger
                 value="personal"
-                className="rounded-xl text-xs font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 flex items-center justify-center gap-1.5"
+                className="min-w-0 h-auto min-h-12 !whitespace-normal rounded-xl text-xs font-bold leading-tight data-[state=active]:bg-white data-[state=active]:shadow-sm px-2 py-2.5 flex items-center justify-center gap-1.5"
               >
                 <HeartPulse className="h-3.5 w-3.5 text-[#BF8360]" />
-                <span className="truncate">2. Personal & Health</span>
+                <span className="block text-center !whitespace-normal">2. Personal & Health</span>
               </TabsTrigger>
               <TabsTrigger
                 value="guardian"
-                className="rounded-xl text-xs font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 flex items-center justify-center gap-1.5"
+                className="min-w-0 h-auto min-h-12 !whitespace-normal rounded-xl text-xs font-bold leading-tight data-[state=active]:bg-white data-[state=active]:shadow-sm px-2 py-2.5 flex items-center justify-center gap-1.5"
               >
                 <Users className="h-3.5 w-3.5 text-[#3C594E]" />
-                <span className="truncate">3. Primary Guardian</span>
+                <span className="block text-center !whitespace-normal">3. Primary Guardian</span>
               </TabsTrigger>
               <TabsTrigger
                 value="parents"
-                className="rounded-xl text-xs font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 flex items-center justify-center gap-1.5"
+                className="min-w-0 h-auto min-h-12 !whitespace-normal rounded-xl text-xs font-bold leading-tight data-[state=active]:bg-white data-[state=active]:shadow-sm px-2 py-2.5 flex items-center justify-center gap-1.5"
               >
                 <UserCheck className="h-3.5 w-3.5 text-[#BF8360]" />
-                <span className="truncate">4. Father & Mother</span>
+                <span className="block text-center !whitespace-normal">4. Father & Mother</span>
               </TabsTrigger>
             </TabsList>
 
