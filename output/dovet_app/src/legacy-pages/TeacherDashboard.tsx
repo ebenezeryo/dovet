@@ -140,7 +140,7 @@ export const TeacherDashboard = () => {
             <Routes>
               <Route path="/" element={<TeacherHome user={user} />} />
               <Route path="/classes" element={<TeacherClasses user={user} />} />
-              <Route path="/learn-packs" element={<TeacherLearnPacks user={user} />} />
+              <Route path="/learn-packs/*" element={<TeacherLearnPacks user={user} />} />
               <Route path="/ai-generator" element={<TeacherAIGenerator user={user} />} />
               <Route path="/exams" element={<TeacherExams user={user} />} />
               <Route path="/analytics" element={<TeacherAnalytics user={user} />} />
