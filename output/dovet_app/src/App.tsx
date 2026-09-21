@@ -60,10 +60,10 @@ function OfflineBanner() {
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-[9999] flex items-center justify-center gap-3 px-4 py-2.5 text-sm font-semibold shadow-md transition-all duration-300"
+      className="fixed top-0 left-0 right-0 z-[9999] flex items-center justify-center gap-3 px-4 py-2 text-xs font-semibold shadow-sm"
       style={{
         backgroundColor: justReconnected ? "#e8f9f0" : "#fff8f0",
-        borderBottom: `2px solid ${justReconnected ? "#73D99F" : "#BF8360"}`,
+        borderBottom: `1px solid ${justReconnected ? "#73D99F" : "#BF8360"}`,
         color: justReconnected ? "#1f6040" : "#7a4f30",
       }}
       role="status"
@@ -93,7 +93,7 @@ function OfflineBanner() {
 
 function HomePage() {
   return (
-    <>
+    <div style={{ backgroundColor: "#ffffff" }}>
       <Navbar />
       <main>
         <Hero />
@@ -102,7 +102,7 @@ function HomePage() {
         <Pricing />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 
@@ -120,7 +120,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <OfflineBanner />
-        <div className="min-h-screen bg-background text-foreground selection:bg-primary/20 selection:text-primary">
+        <div className="min-h-screen" style={{ backgroundColor: "#F2F2F2", color: "#0D0D0D" }}>
           <Suspense fallback={<RouteLoadingFallback />}>
             <Routes>
               <Route path="/" element={<HomePage />} />

@@ -17,7 +17,7 @@ export function Navbar() {
             className="flex h-8 w-8 items-center justify-center rounded-lg text-white"
             style={{ backgroundColor: "#3C594E" }}
           >
-            <GraduationCap className="h-4.5 w-4.5" />
+            <GraduationCap className="h-5 w-5" />
           </div>
           <span className="text-lg font-bold tracking-tight" style={{ color: "#0D0D0D" }}>
             Dovet
