@@ -1,5 +1,5 @@
-import AuthEntry from "../AuthEntry";
+import LegacyAppClient from "../LegacyAppClient";
 
 export default function LoginPage() {
-  return <AuthEntry />;
+  return <LegacyAppClient />;
 }

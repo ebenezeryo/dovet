@@ -10,9 +10,8 @@ out/
 build/
 *.log
 
-# Environment
+# Environment — local overrides stay out of git, but .env (public keys only) is committed
 .env*.local
-.env
 
 # Misc
 .DS_Store
