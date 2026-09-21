@@ -1,0 +1,803 @@
+==========================================================================
+   GREEN TUTORS — COMPLETE WEEKLY LEARNING PACK
+   MASTER REUSABLE PROMPT  (v5 — Question Bank + Quizzes Only)
+==========================================================================
+
+Read this entire prompt carefully before generating anything.
+Generate all outputs in the exact order described in the OUTPUT ORDER
+section. Do not skip any step. Do not combine steps.
+
+══════════════════════════════════════════════════════════════════════════
+⚠️  CRITICAL NAME RULE — READ THIS BEFORE WRITING A SINGLE LINE OF CODE
+══════════════════════════════════════════════════════════════════════════
+
+This rule applies ONLY to the Word document — the Question Bank
+(Step 1). It does NOT apply to the HTML quiz files (Steps 2–6) —
+see the QUIZ NAME CAPTURE RULE immediately below for those.
+
+── FOR THE .docx FILE ONLY ───────────────────────────────────────────────
+
+The STUDENT_NAME declared in Section A is the ONLY student name that
+may appear anywhere in the Question Bank document.
+
+If STUDENT_NAME is "Jack" → the document must say Jack.
+If STUDENT_NAME is "Sophie" → the document must say Sophie.
+
+Before writing the docx script, mentally substitute [STUDENT_NAME]
+with the actual value declared in Section A. Use that literal value
+everywhere in that file. Do not copy names from memory or from
+examples in this prompt.
+
+══════════════════════════════════════════════════════════════════════════
+⚠️  QUIZ NAME CAPTURE RULE — FOR THE HTML QUIZ FILES ONLY
+══════════════════════════════════════════════════════════════════════════
+
+The HTML quizzes must be student-agnostic and reusable for ANY student
+without regenerating the file. Do NOT hardcode STUDENT_NAME (or any
+name from Section A) anywhere in the quiz HTML/JS.
+
+Instead:
+  1. The FIRST thing shown on the welcome screen, before any other
+     content, is the name-entry step (see WELCOME SCREEN spec below —
+     it now comes before the personalised welcome text, not after it).
+  2. Nothing personalised may render until a name has been typed and
+     submitted. No placeholder name, no default name, no fallback name.
+  3. On submit, capture the typed value into a variable, e.g.:
+       var STUDENT_NAME = document.getElementById('nameInput').value.trim();
+     Validate it is non-empty (reuse the existing "Please type your name
+     before starting!" error) before revealing the rest of the screen.
+  4. From that point forward, EVERY instance of "[STUDENT_NAME]"
+     described anywhere else in this prompt (welcome message, how-it-
+     works box, hint box, correct/wrong reactions, milestone messages,
+     results screen, results card, email payload, report text, retry
+     button) must render using this captured JS variable dynamically —
+     never a hardcoded literal string.
+  5. This means the same quiz file, opened by Jack or by Ella, correctly
+     shows "Hello, Jack!" or "Hello, Ella!" — because the name lives in
+     a runtime variable, not in the generated markup.
+
+Wherever this prompt writes an instruction like "declare STUDENT_NAME
+as a constant at the top of the script, e.g. var STUDENT_NAME = 'Jack'"
+for HTML files — that instruction is OVERRIDDEN by this rule. Capture
+the name at runtime instead; never write a literal name into the script.
+
+══════════════════════════════════════════════════════════════════════════
+SECTION A — INPUT VARIABLES  (fill these in before running)
+══════════════════════════════════════════════════════════════════════════
+
+STUDENT_NAME:         [INSERT STUDENT NAME HERE — e.g. Jack, Sophie, Abigail]
+                      (Used for the Question Bank docx ONLY.
+                       The quiz HTML files ignore this value entirely —
+                       they capture the name live from whoever opens the
+                       quiz, so the same quiz files can be reused for any
+                       student. See QUIZ NAME CAPTURE RULE above.)
+TEACHER_NAME:         [INSERT TEACHER NAME HERE — e.g. Mr Uzoma]
+YEAR_GROUP:           [INSERT YEAR — e.g. Year 8]
+SUBJECT:              [INSERT SUBJECT — e.g. Mathematics]
+TOPIC:                [INSERT TOPIC — e.g. Significant Figures]
+CURRICULUM:           [INSERT CURRICULUM — e.g. UK KS3]
+DIFFICULTY:           [Easy / Standard / Hard / Mixed]
+AGENCY_NAME:          [INSERT AGENCY NAME — e.g. Green Tutors]
+QUESTIONS_PER_DAY:    28
+
+── DEFAULT VALUES FOR GREEN TUTORS (agency-wide constants only —
+   STUDENT_NAME is NEVER a default; it must always be entered fresh in
+   Section I for every student, every time) ──
+  TEACHER_NAME:      Mr Uzoma          (change if a different tutor is running this pack)
+  AGENCY_NAME:       Green Tutors
+  QUESTIONS_PER_DAY: 28
+  └─ Structure:       4 clusters × (3 examples + 4 practice) = 28 items
+  └─ Scored only:     16 practice questions count toward the score
+
+  YEAR_GROUP, SUBJECT, CURRICULUM, and DIFFICULTY have no fixed default —
+  they vary per student and must be entered in Section I every time.
+
+  EMAILJS_PUBLIC_KEY, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, and
+  TEACHER_EMAIL are NEVER defaults either — paste in the current
+  credentials fresh in Section I every time this prompt is run. Do not
+  reuse values from a previous conversation or a previous pack.
+
+EMAILJS_PUBLIC_KEY:   [INSERT PUBLIC KEY HERE]
+EMAILJS_SERVICE_ID:   [INSERT SERVICE ID HERE]
+EMAILJS_TEMPLATE_ID:  [INSERT TEMPLATE ID HERE]
+TEACHER_EMAIL:        [INSERT DESTINATION EMAIL HERE]
+
+SUBTOPICS (one per day — make them build progressively in difficulty):
+  Monday:    [e.g. Rule 1 — Counting s.f. in whole numbers (non-zero digits)]
+  Tuesday:   [e.g. Rule 2 & 4 — Mixed numbers and trailing zeros after decimal]
+  Wednesday: [e.g. Rule 3 — Numbers less than 1, leading zeros, rounding]
+  Thursday:  [e.g. Mixed — all types, rounding, real-life, spot the error]
+  Friday:    [e.g. Challenge — all types combined, d.p. vs s.f., multi-step]
+
+══════════════════════════════════════════════════════════════════════════
+SECTION B — STUDENT PROFILE (keep this in mind for EVERY output)
+══════════════════════════════════════════════════════════════════════════
+
+[STUDENT_NAME] is a Year [YEAR_GROUP] student with mild autism.
+She learns best with:
+  • Clear, simple language — one idea per sentence, no jargon
+  • Her name used frequently and warmly throughout everything
+  • Warm, personal, encouraging tone at every stage
+  • Strong visual colour coding to separate different elements
+  • Step-by-step breakdowns — absolutely no steps skipped
+  • Short real-life stories and analogies to open each topic
+  • Consistent layouts so nothing is unexpected
+  • Positive reinforcement everywhere — especially after mistakes
+
+NAME RULES (apply throughout all documents and all quiz files):
+  • Use [STUDENT_NAME] frequently and naturally — never just once per page
+  • Every mistake response must be warm, specific, and encouraging
+  • Write as [TEACHER_NAME] speaking directly to [STUDENT_NAME]
+  • Tone: kind, patient, personal — like a tutor sitting right beside her
+  • In notes: address [STUDENT_NAME] before each section, after each
+    worked example, at every tip/mistake box, and at the end
+  • In quizzes: use [STUDENT_NAME] in correct/wrong reactions, milestone
+    messages, results screen, retry button, and welcome screen
+
+══════════════════════════════════════════════════════════════════════════
+SECTION C — COLOUR SYSTEM (use EXACTLY these — no deviations)
+══════════════════════════════════════════════════════════════════════════
+
+HIGH CONTRAST RULE: ALWAYS dark background + white/bright text
+                    OR white/pale background + near-black text.
+                    NEVER pale text on pale background.
+                    NEVER dark text on dark background.
+
+Deep colours (use as backgrounds with WHITE text):
+  Deep Green:   #1B5E20   (primary brand colour — headers, answer boxes)
+  Mid Green:    #2E7D32   (step badges, secondary headers)
+  Deep Blue:    #0D47A1   (Section 1, Monday colour, grade box)
+  Deep Teal:    #004D40   (Section 4, Wednesday colour)
+  Deep Purple:  #4A148C   (Section 5, Thursday colour)
+  Deep Orange:  #BF360C   (Section 6, Friday colour)
+  Deep Red:     #B71C1C   (error boxes, mistake warnings)
+  Dark Grey:    #37474F   (neutral dark headers)
+  Gold/Amber:   #F57F17   (hint boxes bg, percentage box, accent)
+
+Pale colours (use as backgrounds with DARK #212121 text):
+  Pale Green:   #F1F8E9   (body content beside green sections)
+  Pale Blue:    #E3F2FD   (body content beside blue sections)
+  Pale Teal:    #E0F2F1   (body content beside teal sections)
+  Pale Purple:  #F3E5F5   (body content beside purple sections)
+  Pale Orange:  #FBE9E7   (body content beside orange sections)
+  Pale Red:     #FFEBEE   (error/mistake body content)
+  Pale Gold:    #FFF8E1   (tip boxes, hint body)
+  Light Grey:   #ECEFF1   (neutral alternating rows)
+  White:        #FFFFFF   (default card background)
+
+Day colour mapping (solid dark bg + white text ALWAYS):
+  Monday:    #0D47A1  (deep blue)
+  Tuesday:   #1B5E20  (deep green)
+  Wednesday: #004D40  (deep teal)
+  Thursday:  #4A148C  (deep purple)
+  Friday:    #BF360C  (deep orange)
+
+Results card stats (all with white text):
+  Score box:      #1B5E20 (deep green)
+  Percentage box: #F57F17 (deep gold)
+  Grade box:      #0D47A1 (deep blue)
+
+══════════════════════════════════════════════════════════════════════════
+SECTION D — OUTPUT ORDER (generate in this exact sequence)
+══════════════════════════════════════════════════════════════════════════
+
+After each step say: "✅ [name] ready — download it now. Say NEXT for [next]."
+Wait for the user to say NEXT before proceeding.
+
+  STEP 1:  Question Bank  (.docx — all 5 days combined)
+  STEP 2:  Monday quiz  (.html)
+  STEP 3:  Tuesday quiz  (.html)
+  STEP 4:  Wednesday quiz  (.html)
+  STEP 5:  Thursday quiz  (.html)
+  STEP 6:  Friday quiz  (.html)  → then show COMPLETION SUMMARY
+
+NOTE: Lesson Notes are NOT generated by this prompt. This pack curates
+and produces the Question Bank (all questions, worked examples, hints,
+and solutions for the week in one Word document) plus the 5 daily
+quizzes only.
+
+══════════════════════════════════════════════════════════════════════════
+SECTION E — QUESTION BANK SPECIFICATION  (Step 1)
+══════════════════════════════════════════════════════════════════════════
+
+Build using the docx npm library. ONE file containing ALL five days.
+Each day separated by a full-width day banner.
+
+── COVER PAGE ──────────────────────────────────────────────────────────
+
+Deep green agency banner + title "[TOPIC] — Complete Question Bank" +
+"Monday to Friday · All Examples & Questions · With Full Solutions" +
+"Student: [STUDENT_NAME] · [YEAR_GROUP] · Teacher: [TEACHER_NAME]"
+Usage instructions box below (dark grey bg, white text).
+
+── PER DAY STRUCTURE ───────────────────────────────────────────────────
+
+1. DAY BANNER: full-width, day colour background, white text,
+   day name in 38pt bold + topic in 21pt gold below.
+
+2. PER CLUSTER: 4 clusters per day, each containing:
+
+   a. SOLVED EXAMPLE HEADERS (3 per cluster):
+      Two-column: left = mid green bg "✅ SOLVED EXAMPLE N OF 3" in white,
+      right = pale green bg, topic name in deep green bold.
+
+   b. PRACTICE QUESTION HEADERS (4 per cluster):
+      Two-column: left = deep blue bg "📝 PRACTICE QUESTION" in white,
+      right = pale blue bg, topic name in deep blue bold.
+
+   c. FOR EVERY QUESTION (examples AND practice):
+      - Question text: bold 24pt near-black
+      - HINT BOX: pale gold (#FFF8E1) bg, gold left border (#F57F17, 16pt),
+        "💡 Hint:" label in deep orange bold + hint text in dark
+      - OPTIONS A B C D: two-column rows:
+          Left: letter badge — green bg + white if correct,
+                pale grey bg + dark grey if wrong
+          Right: option text — pale green bg + "✓ CORRECT" in green if correct,
+                 white bg if wrong. Thick green left border on correct option.
+      - SOLUTION BOX: pale green bg (#F1F8E9), green left border (20pt):
+          "📖 Step-by-step solution:" in deep green bold
+          Each step: "Step N:" in mid green bold + step text in dark
+          "✓ Answer: [answer]" in deep green bold at the bottom
+
+3. ANSWER KEY at the end of EACH day:
+   Day colour bg banner + list of Q number, truncated question,
+   letter and answer in green bold.
+
+── QUESTION DATA RULES ──────────────────────────────────────────────────
+
+Structure per cluster (repeat for all 4 clusters per day):
+  3 SOLVED EXAMPLES: self-explanatory, varied, numbered 1-2-3.
+    Example 1: simplest case, introduces the concept clearly.
+    Example 2: slightly different angle — different number or edge case.
+    Example 3: more nuanced case, showing a common pitfall or comparison.
+  4 PRACTICE QUESTIONS: increasing challenge, real-life contexts welcome.
+
+For EVERY question provide:
+  text:    full question (plain text, no HTML or markdown)
+  hint:    detailed — guides method without giving the answer.
+           Must explain WHAT to look for and HOW to start.
+  opts:    exactly 4 options (A, B, C, D) as strings
+  correct: index 0-3
+  why:     one clear sentence explaining why the answer is correct
+  steps:   array of 3-6 steps in plain simple English.
+           Each step must be self-contained.
+           No steps skipped. Written for [YEAR_GROUP] level.
+           Use arrow notation: "→" not "=>"
+
+Difficulty ramp across the week:
+  Mon/Tue:    confidence-building, straightforward, one concept at a time
+  Wed/Thu:    moderate challenge, two rules combined, spot-the-error type
+  Friday:     everything combined, multi-step, problem-solving, comparisons
+
+══════════════════════════════════════════════════════════════════════════
+SECTION F — HTML QUIZ SPECIFICATION  (Steps 2-6, one file per day)
+══════════════════════════════════════════════════════════════════════════
+
+Each file must be a FULLY SELF-CONTAINED standalone HTML page.
+No external files needed except the EmailJS CDN.
+Mobile-responsive. Works on phone, tablet, desktop.
+Ready to drag-and-drop onto app.netlify.com/drop.
+
+── HEAD ─────────────────────────────────────────────────────────────────
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+Initialize at the top of the <script> block:
+  emailjs.init('[EMAILJS_PUBLIC_KEY]');
+
+── WELCOME SCREEN ───────────────────────────────────────────────────────
+
+Shown before any questions. Contains:
+
+1. HEADER BAR: deep green (#1B5E20) bg, "🔢 [TOPIC] — [Day]" in white,
+   "[AGENCY_NAME] · [YEAR_GROUP] · [SUBJECT] · [TEACHER_NAME]" in
+   pale green subtitle. (Not personalised — safe to show immediately.)
+
+2. NAME ENTRY STEP — SHOWN IMMEDIATELY AFTER THE HEADER, BEFORE ANYTHING
+   ELSE ON THIS SCREEN:
+   Label: "✏️ Type your name to begin:"
+   Field: required, placeholder "Type your name here"
+   Error (shown if Continue/Enter pressed while empty):
+     "⚠️ Please type your name before starting!"
+   Button: "Continue →"  (or press Enter)
+   On successful submit: capture the value into STUDENT_NAME (per the
+   QUIZ NAME CAPTURE RULE above), then reveal items 3–8 below with
+   STUDENT_NAME filled in dynamically wherever it appears. Everything
+   from item 3 onward stays hidden until this step is completed.
+
+3. DAY EMOJI + TITLE: large emoji, day name as title in deep green.
+
+4. PERSONALISED WELCOME MESSAGE (unique per day, uses [STUDENT_NAME] —
+   now the captured runtime value, not a fixed one):
+   Monday:
+     "Good morning, [STUDENT_NAME]! 🌅
+      Welcome to your Monday quiz!
+      A brand new week — and you are already here, ready to learn.
+      That says so much about you, [STUDENT_NAME].
+      [TEACHER_NAME] is proud of you already!
+      Read each example carefully before answering. You have got this! 💚"
+   Tuesday:
+     "Good morning, [STUDENT_NAME]! 🌿
+      Welcome back for Tuesday!
+      You showed up again — and that takes real dedication, [STUDENT_NAME].
+      Today the examples will guide you through everything.
+      Read them carefully and you will be ready. Let's go! 💚"
+   Wednesday:
+     "Hello, [STUDENT_NAME]! 🌊
+      Happy Wednesday — you are halfway through the week!
+      Two full quizzes done already, [STUDENT_NAME]. Incredible!
+      Today is all about numbers less than 1 — the tricky ones.
+      But you have three examples to guide you. Keep going! 💚"
+   Thursday:
+     "Hey [STUDENT_NAME]! 💜
+      It is Thursday — almost at the finish line!
+      Three quizzes done, [STUDENT_NAME]. One more today, one tomorrow.
+      Today mixes all the types together — you have studied them all!
+      [TEACHER_NAME] believes in you completely. Let's do this! 💚"
+   Friday:
+     "It is FRIDAY, [STUDENT_NAME]! 🎉
+      You have made it all the way to Friday!
+      Four quizzes completed this week, [STUDENT_NAME] — that is amazing!
+      This is the final one. Give it absolutely everything you have got.
+      [TEACHER_NAME] cannot wait to see how far you have come! 💚"
+
+5. HOW-IT-WORKS BOX: deep green (#1B5E20) bg, white text, gold strong tags:
+   "📖 How this quiz works, [STUDENT_NAME]:
+    Each topic starts with 3 Solved Examples — study each one carefully!
+    They are self-explanatory and show you exactly how to answer.
+    Then answer 4 Practice Questions using what you just learned.
+    [QUESTIONS_PER_DAY] items total · 16 practice questions scored."
+
+6. INFO GRID: 4 boxes (2×2), pale green bg, green border:
+   📚 Topic | ✅ Examples: 3 per topic | 📝 Practice: 16 scored | 📧 Results: sent to [TEACHER_NAME]
+
+7. START BUTTON: deep green (#1B5E20), full width, "Start Quiz →"
+   (The old separate "NAME INPUT" step that used to sit here has been
+   removed — name entry now happens once, up front, in item 2 above.)
+
+── PROGRESS BAR ─────────────────────────────────────────────────────────
+
+Top of screen during quiz:
+  Left: "Item N of [total]"
+  Right: "Score: N / 16"  (updates live — only practice questions)
+  Pale green track (#C8E6C9), deep green fill (#2E7D32), animated.
+
+── CLUSTER HEADER ───────────────────────────────────────────────────────
+
+Shown ABOVE the question card, changes with each question.
+For examples:   dark colour matching example number (eg1/eg2/eg3)
+                  eg1: #1B5E20 bg (deep green)
+                  eg2: #2E7D32 bg (mid green)
+                  eg3: #004D40 bg (deep teal)
+                badge: "✅ Example N of 3"
+                topic: right side in white
+For practice:   #0D47A1 bg (deep blue)
+                badge: "📝 Practice Question"
+                topic: right side in white
+Left border on cluster header: 6px solid #FFD54F (gold)
+
+── QUESTION CARD ────────────────────────────────────────────────────────
+
+White bg card, light green border (#C8E6C9), 16px border-radius, shadow.
+
+Inside the card (top to bottom):
+
+1. EXAMPLE NOTICE (shown only for example questions):
+   Deep green bg, gold left border (5px #FFD54F), white bold text:
+   "👀 Example N of 3 — study this carefully, [STUDENT_NAME]!
+    The correct answer is shown. Read every step in the solution below.
+    Then click Next when you are ready."
+
+2. DAY PILL: solid dark day colour (e.g. #0D47A1 for Monday), white text,
+   pill shape, day name in uppercase.
+
+3. QUESTION NUMBER: "Solved Example N of 3" OR "Practice Question"
+   in small caps grey.
+
+4. QUESTION TEXT: 18px bold, near-black (#212121).
+
+5. HINT BOX (always visible, before answer options):
+   Background: #FFD54F (deep gold)
+   Left border: 5px solid #F57F17 (orange-gold)
+   "💡 Hint:" label in #BF360C (deep red-orange) bold
+   Hint text in #212121 (near black) bold, 14px
+   The hint must explain HOW to approach the question, not give the answer.
+   It must be detailed enough that [STUDENT_NAME] knows where to start.
+
+── ANSWER OPTIONS (examples vs practice) ─────────────────────────────────
+
+FOR SOLVED EXAMPLES:
+  - All four options shown, ALL disabled (no clicking)
+  - Correct option pre-highlighted: deep green border + pale green bg +
+    green letter badge (deep green bg, white text)
+  - Full step-by-step solution shown AUTOMATICALLY below
+  - Solution box: pale green bg (#E8F5E9), green border (2px #2E7D32):
+      "✅ Answer: [correct answer]" in bold green
+      italic why-explanation in green
+      "📖 Full step-by-step explanation — read every step, [STUDENT_NAME]:"
+      Each step: gold circular arrow badge (→) + step text
+  - Next button text: "Got it — Next →"
+
+FOR PRACTICE QUESTIONS:
+  Normal interactive A B C D buttons.
+
+  BUTTON NORMAL STATE:
+    White bg, 2.5px solid #B0BEC5 border, 12px radius.
+    Letter badge: #ECEFF1 bg, #37474F text.
+    Hover: #E3F2FD bg + #1565C0 border + translateX(4px) transform.
+
+  AFTER CORRECT ANSWER:
+    Chosen option: #E8F5E9 bg + 2.5px solid #1B5E20 border +
+    letter badge: #1B5E20 bg + white text.
+    All other options disabled.
+
+  AFTER WRONG ANSWER:
+    Chosen option: #FFEBEE bg + 2.5px solid #B71C1C border +
+    letter badge: #B71C1C bg + white text.
+    Correct option auto-highlighted: same as correct style above.
+    All options disabled.
+
+  CORRECT REACTION MESSAGE (deep green #1B5E20 bg, white bold text):
+  Rotate through these (always include [STUDENT_NAME]):
+    "Yes, [STUDENT_NAME]! That is exactly right! 🌟"
+    "Brilliant, [STUDENT_NAME]! You nailed it! 💚"
+    "Perfect, [STUDENT_NAME]! [TEACHER_NAME] would be so proud of you! ⭐"
+    "Outstanding, [STUDENT_NAME]! Keep going! 🎉"
+    "Spot on, [STUDENT_NAME]! You are really getting this! 🔥"
+    "Fantastic work, [STUDENT_NAME]! That was a great answer! 💪"
+
+  WRONG REACTION MESSAGE (deep orange #E65100 bg, white bold text):
+  Rotate through these (always warm, encouraging, include [STUDENT_NAME]):
+    "Don't worry, [STUDENT_NAME] — getting it wrong is part of learning!
+     Read the steps below and you will understand it now. You can do this! 💛"
+    "That one was tricky, [STUDENT_NAME], but mistakes help us grow!
+     Look at the explanation below — it will make sense once you read it. 💚"
+    "Not quite this time, [STUDENT_NAME] — but that is okay!
+     Every great mathematician made mistakes too.
+     Read the steps and you will get the next one! 📖"
+    "Almost there, [STUDENT_NAME]! Read through the steps slowly —
+     you will see exactly where the answer comes from.
+     You are braver than you think! 🌱"
+    "Keep going, [STUDENT_NAME]! This question was a hard one.
+     Study the solution below and you will be ready for the next one.
+     [TEACHER_NAME] believes in you! 💙"
+    "No worries at all, [STUDENT_NAME]!
+     Understanding a mistake is just as important as getting it right.
+     Study the steps and come back stronger! 🏆"
+
+  CORRECT FEEDBACK BOX (#E8F5E9 bg, 2px solid #2E7D32 border, green text):
+    "✅ Correct, [STUDENT_NAME]! [why explanation]"
+
+  WRONG FEEDBACK BOX (#FFF9C4 bg, 2px solid #F9A825 border, dark text):
+    "❌ Not quite this time, [STUDENT_NAME]."
+    "The correct answer is: [correct answer in bold]"
+    "📖 Here is exactly how to get there, [STUDENT_NAME] — read each step:"
+    Each step: gold circular arrow badge (bg #F57F17, white text, 22px circle)
+               + step text beside it
+
+── MILESTONE MESSAGES (#0D47A1 bg, white bold text) ──────────────────────
+
+Show after item index 3 if correct:
+  "Wonderful start, [STUDENT_NAME]! Keep reading those examples carefully! 💚"
+Show after item at the halfway point:
+  "Halfway there, [STUDENT_NAME]! You are doing brilliantly — keep going! 🌟"
+Show after the final item:
+  "That was the final question, [STUDENT_NAME]! See your results below! 🎉"
+
+── NEXT BUTTON ──────────────────────────────────────────────────────────
+
+Deep green (#1B5E20) bg, white text, shadow, scale on hover.
+Only appears AFTER student has answered (or read an example).
+For examples: "Got it — Next →"
+For practice: "Next →"
+
+── RESULTS SCREEN ───────────────────────────────────────────────────────
+
+Score calculated from PRACTICE QUESTIONS ONLY (16 questions).
+Solved examples are NOT included in the score.
+
+1. PERFORMANCE DISPLAY:
+   Large emoji + title + score badge (deep green bg, white text) +
+   animated orange progress bar + personalised message.
+
+   90-100%:  🏆 "Outstanding, [STUDENT_NAME]!"
+     "You absolutely nailed it, [STUDENT_NAME]! Every single practice
+      question — handled perfectly. [TEACHER_NAME] will be so proud!
+      You should feel incredibly proud of yourself too! 💚"   Grade: A+
+
+   75-89%:   🌟 "Brilliant work, [STUDENT_NAME]!"
+     "You did really well, [STUDENT_NAME]! A few slipped but look at
+      that score — be genuinely proud. Check the missed ones in your
+      question bank and you will get them next time! 💚"   Grade: A
+
+   60-74%:   👍 "Good effort, [STUDENT_NAME]!"
+     "Solid work, [STUDENT_NAME]! You are understanding the concepts.
+      Re-read the examples in the sections you missed — you will see
+      exactly where to improve. You are getting there! 💚"   Grade: B
+
+   50-59%:   💪 "Keep going, [STUDENT_NAME]!"
+     "More than half right — a good foundation, [STUDENT_NAME]!
+      Re-read your question bank carefully and try again.
+      [TEACHER_NAME] knows you can do better and so do you! 💚"   Grade: C
+
+   0-49%:    📖 "More practice needed, [STUDENT_NAME]!"
+     "Do not be discouraged, [STUDENT_NAME] — every expert started
+      where you are! Re-read your question bank, study each example
+      carefully, then try again. [TEACHER_NAME] is here for you! 💚"  Grade: D
+
+2. EMAIL SEND SECTION (deep green border box):
+   Heading: "📧 Send your results to [TEACHER_NAME]"
+   Paragraph: "Well done for finishing, [STUDENT_NAME]! Click below."
+   Button: "📤 Send Results to [TEACHER_NAME]"
+
+   ═══ CRITICAL EMAIL SEND IMPLEMENTATION ═══
+   These rules prevent the infinite-spinning bug. Follow EXACTLY.
+
+   a) BUILD REPORT TEXT FIRST, assign to window._ed SECOND:
+      var reportText = buildReport(pct, ds, scoreStr, gradeStr);
+      window._ed = { date:ds, score:scoreStr, pct:pct+'%',
+                     grade:gradeStr, report:reportText };
+      ← NEVER reference window._ed inside buildReport itself.
+        This causes a silent crash and infinite button spinning.
+
+   b) NULL GUARD at the start of sendResults():
+      if(!window._ed){
+        alert('Results not ready yet. Please finish the quiz first!');
+        return;
+      }
+
+   c) DISABLE button immediately, show "⏳ Sending..." status.
+
+   d) 15-SECOND TIMEOUT FALLBACK:
+      var timeout = setTimeout(function(){
+        [show error message with screenshot instruction]
+        [re-enable button with "📤 Try Sending Again" text]
+      }, 15000);
+      Call clearTimeout(timeout) in BOTH .then() AND error handler.
+
+   e) EMAIL PAYLOAD (send ALL of these fields):
+      student_name: [STUDENT_NAME]
+      date:         date string (e.g. "2 Jul 2025")
+      score:        e.g. "14 / 16"
+      percentage:   e.g. "88%"
+      grade:        e.g. "A"
+      report:       full plain-text report (see below)
+      name:         [STUDENT_NAME]
+      message:      same as report
+      title:        "[TOPIC] [Day] — [STUDENT_NAME]"
+
+   f) REPORT TEXT format:
+      "=== [AGENCY_NAME] — [TOPIC] ===
+       [DAY] QUIZ RESULTS
+
+       Student: [STUDENT_NAME]
+       Date: [date]
+       Score: [score] ([percentage])
+       Grade: [grade]
+
+       --- QUESTIONS [STUDENT_NAME] GOT CORRECT ---
+       [list each correct Q with number and text]
+
+       --- QUESTIONS TO REVIEW WITH [STUDENT_NAME] ---
+       [for each missed Q:]
+         Q[N]: [question text]
+            Correct answer: [answer]
+            [STUDENT_NAME] answered: [their choice]"
+
+   g) SUCCESS message (#E8F5E9 bg, #1B5E20 text, green border):
+      "✅ Results sent to [TEACHER_NAME]! He will see your full report
+       shortly. Well done, [STUDENT_NAME]! 💚"
+
+   h) ERROR message (#FFEBEE bg, #B71C1C text, red border):
+      "⚠️ Could not send right now. Please screenshot the results card
+       and send to [TEACHER_NAME] on WhatsApp. Error: [error text]"
+      Re-enable button with "📤 Try Sending Again" text.
+
+3. RESULTS CARD (3px solid deep green border):
+   - Header bar: [AGENCY_NAME] logo badge + title + date
+   - Student strip: deep green bg, white text:
+     "👩‍🎓 Student: [STUDENT_NAME] · [YEAR_GROUP] · [TOPIC] · [Day]"
+   - Three stat boxes side by side (all with white text):
+       Score:      deep green (#1B5E20) bg
+       Percentage: deep orange (#F57F17) bg
+       Grade:      deep blue (#0D47A1) bg
+   - Section: "✅ Questions [STUDENT_NAME] got correct"
+     List each correct Q with Q number and question text.
+   - Section: "❌ Questions to review with [TEACHER_NAME]"
+     List each missed Q with correct answer in bold red below.
+   - Footer: "[AGENCY_NAME] · [YEAR_GROUP] · [SUBJECT] · [TEACHER_NAME]"
+
+4. RETRY BUTTON: deep blue (#0D47A1) bg, white text:
+   "↻ Try again, [STUDENT_NAME]!"
+   On click: reset cur=0, score=0, log=[], window._ed=null,
+   re-enable send button, clear status text, return to question 1.
+
+── QUIZ QUESTION DATA STRUCTURE ─────────────────────────────────────────
+
+Store all questions as a flat array in the HTML script block.
+Each cluster: first 3 items are examples (isExample:true),
+next 4 items are practice (isExample:false).
+All 28 items per day in order.
+
+Each question object:
+{
+  text:      "question text",
+  hint:      "detailed hint guiding method without giving answer",
+  opts:      ["A text", "B text", "C text", "D text"],
+  correct:   0,  // index 0-3
+  why:       "one sentence explaining why this is correct",
+  steps:     ["Step 1 text", "Step 2 text", ...],
+  isExample: true/false,
+  exNum:     1/2/3 (for examples) or 0 (for practice),
+  clTopic:   "cluster topic name",
+  clIdx:     0/1/2/3  // cluster index
+}
+
+══════════════════════════════════════════════════════════════════════════
+SECTION G — TECHNICAL IMPLEMENTATION NOTES
+══════════════════════════════════════════════════════════════════════════
+
+── DOCX FILES ──────────────────────────────────────────────────────────
+
+⚠️  NAME ENFORCEMENT: Before writing any docx script, declare the
+student name as a constant at the very top of the script:
+  const STUDENT = 'Jack';  // ← use the actual STUDENT_NAME value
+Then use STUDENT everywhere in the script — in strings, in
+template literals, in Paragraph text — never write the name literally.
+This guarantees the correct name appears in every cell and paragraph.
+
+Use npm package: docx
+Install: npm install docx
+
+Critical rules:
+  - ShadingType: always use CLEAR, never SOLID (SOLID renders black)
+  - Table widths: always WidthType.DXA, never PERCENTAGE
+  - Column widths: must sum exactly to table width
+  - PageBreak: must be inside a Paragraph element
+  - Never use \n — use separate Paragraph elements
+  - Page margins: top:720, bottom:720, left:900, right:900 (DXA)
+  - Usable page width = 9360 DXA (A4 with above margins)
+
+Write the full Node.js script and run it with: node script.js
+Output to: /mnt/user-data/outputs/[filename]
+
+── HTML FILES ───────────────────────────────────────────────────────────
+
+⚠️  NAME ENFORCEMENT (RUNTIME CAPTURE — see QUIZ NAME CAPTURE RULE):
+Do NOT declare STUDENT_NAME as a hardcoded literal anywhere in the
+script. Instead, at the top of the <script> block declare it empty:
+  var STUDENT_NAME = '';
+Populate it only once the student submits the name-entry step (welcome
+screen item 2):
+  STUDENT_NAME = document.getElementById('nameInput').value.trim();
+  if (!STUDENT_NAME) { /* show the "type your name" error, stop here */ }
+Then use STUDENT_NAME everywhere in the JavaScript — in welcome messages,
+reaction messages, milestone messages, results screen text, email payload,
+report text, and retry button label — always reading from this variable,
+never from a literal string. This guarantees the SAME html file works
+correctly no matter which student opens it and types their name in.
+
+Also apply this to the HTML body: no static text anywhere in the
+document should contain a literal student name. Any element that needs
+to show the name must be populated by JavaScript after name capture
+(e.g. innerText/textContent assignment), never written directly into
+the HTML markup.
+
+All CSS must be inline in a <style> block inside the HTML file.
+No external CSS files. No external JS files except EmailJS CDN.
+All question data must be JSON.stringify'd into a var Qs= declaration.
+All messages (correct/wrong) must be arrays of strings.
+Use var not let/const for maximum browser compatibility.
+Script tag: use <script> ... <\/script> to avoid closing tag issues.
+
+── QUESTION DATA ────────────────────────────────────────────────────────
+
+For very large question datasets: write the question data to a
+separate .js file (data.js) using module.exports, then require()
+it in the HTML builder script. This avoids bash argument size limits.
+
+Example:
+  // data.js
+  const MON = [...]; const TUE = [...]; ...
+  module.exports = { MON, TUE, WED, THU, FRI };
+
+  // builder.js
+  const { MON, TUE, WED, THU, FRI } = require('./data.js');
+
+── FILE NAMING CONVENTION ───────────────────────────────────────────────
+
+Question bank:   [topic_slug]_all_questions.docx
+Monday quiz:     monday_[topic_slug]_quiz.html
+Tuesday quiz:    tuesday_[topic_slug]_quiz.html
+Wednesday quiz:  wednesday_[topic_slug]_quiz.html
+Thursday quiz:   thursday_[topic_slug]_quiz.html
+Friday quiz:     friday_[topic_slug]_quiz.html
+
+[topic_slug] = topic name lowercase, spaces replaced with underscores
+e.g. "Significant Figures" → "significant_figures"
+
+══════════════════════════════════════════════════════════════════════════
+SECTION H — COMPLETION SUMMARY (show after Step 6)
+══════════════════════════════════════════════════════════════════════════
+
+"════════════════════════════════════════════════
+ ✅  COMPLETE WEEKLY PACK IS READY
+════════════════════════════════════════════════
+ TOPIC:    [TOPIC]
+ STUDENT:  [STUDENT_NAME]
+ YEAR:     [YEAR_GROUP]
+ TEACHER:  [TEACHER_NAME]
+
+ 📄  FILES GENERATED:
+ 1. [topic_slug]_all_questions.docx
+ 2. monday_[topic_slug]_quiz.html
+ 3. tuesday_[topic_slug]_quiz.html
+ 4. wednesday_[topic_slug]_quiz.html
+ 5. thursday_[topic_slug]_quiz.html
+ 6. friday_[topic_slug]_quiz.html
+
+ 📱  NEXT STEPS FOR [TEACHER_NAME]:
+ 1. Download all 6 files above
+ 2. Go to app.netlify.com/drop
+ 3. Drag each HTML file one at a time
+ 4. Copy the link that appears after each upload
+ 5. On Sunday evening send this WhatsApp to [STUDENT_NAME]:
+
+    'Good evening [STUDENT_NAME]! 🌟
+     Here are your quiz links for this week.
+     Open ONE per day — no rushing! 💚
+
+     📘 Monday:    [paste link]
+     📗 Tuesday:   [paste link]
+     📙 Wednesday: [paste link]
+     📕 Thursday:  [paste link]
+     📓 Friday:    [paste link]
+
+     Look through your question bank FIRST before Monday!
+     [TEACHER_NAME] believes in you.
+     You can do this, [STUDENT_NAME]! 🏆'
+
+ 6. Send the question bank .docx to [STUDENT_NAME] via WhatsApp
+    so she can look through it before opening Monday's quiz.
+
+ 📧  EMAIL DELIVERY:
+ Results from every quiz will be sent automatically to:
+ [TEACHER_EMAIL]
+ To add more recipients: log into emailjs.com → Email Templates →
+ open your template → in the 'To Email' field, add addresses
+ separated by commas. No code changes needed.
+════════════════════════════════════════════════"
+
+══════════════════════════════════════════════════════════════════════════
+SECTION I — QUICK INPUT REFERENCE  (fill these in, then paste prompt)
+══════════════════════════════════════════════════════════════════════════
+
+STUDENT_NAME:         ________________________________
+TEACHER_NAME:         ________________________________
+YEAR_GROUP:           ________________________________
+SUBJECT:              ________________________________
+TOPIC:                ________________________________
+CURRICULUM:           ________________________________
+DIFFICULTY:           ________________________________
+AGENCY_NAME:          ________________________________
+
+EMAILJS_PUBLIC_KEY:   ________________________________
+EMAILJS_SERVICE_ID:   ________________________________
+EMAILJS_TEMPLATE_ID:  ________________________________
+TEACHER_EMAIL:        ________________________________
+
+SUBTOPICS:
+  Monday:    ________________________________________
+  Tuesday:   ________________________________________
+  Wednesday: ________________________________________
+  Thursday:  ________________________________________
+  Friday:    ________________________________________
+
+══════════════════════════════════════════════════════════════════════════
+END OF PROMPT — Agency constants (teacher, agency name, questions/day)
+are pre-filled for Green Tutors. STUDENT_NAME, the EmailJS credentials,
+and all other Section I fields must be entered fresh every time — there
+is no default student and no default EmailJS keys. To reuse: fill in
+Section I above and paste the entire prompt into a fresh Claude
+conversation. Say GO to begin.
+══════════════════════════════════════════════════════════════════════════

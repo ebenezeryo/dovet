@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* ── Brand palette ────────────────────────────────────────────────────────
+     #3C594E  forest-green  → primary (CTAs, logo, active nav, progress bar)
+     #73D99F  mint-green    → accent  (success, correct answers, highlights)
+     #BF8360  terracotta    → warm    (exam badges, secondary CTAs, warnings)
+     #F2F2F2  off-white     → surface (page bg, muted areas, inputs)
+     #0D0D0D  near-black    → foreground (headings, body text)
+  ── */
+
+  /* Surface — #F2F2F2 tinted just enough to feel warm */
+  --background: #F2F2F2;
+  --foreground: #0D0D0D;
+
+  /* Cards sit white above the #F2F2F2 page surface */
+  --card: #ffffff;
+  --card-foreground: #0D0D0D;
+  --popover: #ffffff;
+  --popover-foreground: #0D0D0D;
+
+  /* Primary — #3C594E forest green */
+  --primary: #3C594E;
+  --primary-foreground: #ffffff;
+
+  /* Secondary — a pale tint of the forest green for ghost surfaces */
+  --secondary: #eaf1ef;
+  --secondary-foreground: #2a3f38;
+
+  /* Muted — slightly darker than #F2F2F2 for section backgrounds */
+  --muted: #e9e9e9;
+  --muted-foreground: #5a6a65;
+
+  /* Accent — #73D99F mint green (success, highlights) */
+  --accent: #e8f9f0;
+  --accent-foreground: #1f6040;
+
+  /* Destructive stays red — independent of brand */
+  --destructive: oklch(0.58 0.22 25);
+  --destructive-foreground: #ffffff;
+
+  --border: #d8dedd;
+  --input: #e4e8e7;
+  --ring: #3C594E;
+
+  /* Charts — brand palette in order */
+  --chart-1: #3C594E;
+  --chart-2: #73D99F;
+  --chart-3: #BF8360;
+  --chart-4: #5a8a78;
+  --chart-5: #a0c8b8;
+
+  /* Sidebar uses same white-card surface */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0D0D0D;
+  --sidebar-primary: #3C594E;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eaf1ef;
+  --sidebar-accent-foreground: #0D0D0D;
+  --sidebar-border: #d8dedd;
+  --sidebar-ring: #3C594E;
+
+  /* Inter as primary — clean, neutral, professional; Jakarta Sans for display headings */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  --font-serif: ui-serif, Georgia, Cambria, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  --radius: 0.875rem;
+
+  --shadow-2xs: 0 1px 2px 0 rgba(13, 13, 13, 0.03);
+  --shadow-xs: 0 1px 3px 0 rgba(13, 13, 13, 0.05), 0 1px 2px -1px rgba(13, 13, 13, 0.04);
+  --shadow-sm: 0 2px 4px 0 rgba(13, 13, 13, 0.05), 0 1px 2px -1px rgba(13, 13, 13, 0.04);
+  --shadow: 0 4px 6px -1px rgba(13, 13, 13, 0.06), 0 2px 4px -2px rgba(13, 13, 13, 0.05);
+  --shadow-md: 0 6px 12px -2px rgba(13, 13, 13, 0.07), 0 3px 6px -3px rgba(13, 13, 13, 0.06);
+  --shadow-lg: 0 12px 24px -4px rgba(13, 13, 13, 0.08), 0 4px 12px -2px rgba(13, 13, 13, 0.05);
+  --shadow-xl: 0 20px 32px -6px rgba(13, 13, 13, 0.09), 0 8px 16px -4px rgba(13, 13, 13, 0.05);
+}
+
+.dark {
+  --background: #111714;
+  --foreground: #F2F2F2;
+  --card: #1a221e;
+  --card-foreground: #F2F2F2;
+  --popover: #1a221e;
+  --popover-foreground: #F2F2F2;
+  --primary: #73D99F;
+  --primary-foreground: #0D0D0D;
+  --secondary: #243028;
+  --secondary-foreground: #c8dcd5;
+  --muted: #1f2923;
+  --muted-foreground: #8aada0;
+  --accent: #243028;
+  --accent-foreground: #73D99F;
+  --destructive: oklch(0.62 0.22 25);
+  --destructive-foreground: #F2F2F2;
+  --border: #2c3d35;
+  --input: #2c3d35;
+  --ring: #73D99F;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  letter-spacing: -0.008em;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+/* Ensure white surfaces always render as pure white regardless of
+   how Tailwind resolves bg-white or bg-card via CSS variables.
+   Also covers all floating overlays (dialogs, selects, dropdowns, popovers). */
+.bg-white,
+[data-slot="card"],
+[data-slot="dialog-content"],
+[data-slot="alert-dialog-content"],
+[data-slot="select-content"],
+[data-slot="command"],
+[data-slot="popover-content"],
+[data-slot="dropdown-menu-content"],
+[data-slot="dropdown-menu-sub-content"],
+[data-slot="context-menu-content"],
+[data-slot="context-menu-sub-content"],
+[data-slot="menubar-content"],
+[data-slot="menubar-sub-content"],
+[data-slot="hover-card-content"],
+[data-slot="navigation-menu-viewport"],
+[data-slot="drawer-content"],
+[data-slot="sheet-content"] {
+  background-color: #ffffff !important;
+}
+
+/* SelectTrigger should show white not transparent in a white card */
+[data-slot="select-trigger"] {
+  background-color: #ffffff !important;
+}
+
+/* Display headings use Plus Jakarta Sans for personality */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Refined heading weights — less heavy than before */
+h1 { font-weight: 700; }
+h2 { font-weight: 700; }
+h3 { font-weight: 600; }
+
+/* Figma-Grade Smooth Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(60, 89, 78, 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(60, 89, 78, 0.45);
+}
