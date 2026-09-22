@@ -35,60 +35,12 @@ import {
   Download,
 } from "lucide-react";
 import { toast } from "sonner";
-import type { DovetUser, StudentRecord } from "@/lib/types";
+import type { StudentRecord } from "@/lib/types";
 import { SPORTS_HOUSES } from "@/lib/types";
 import { useStudents } from "@/lib/student-store";
 import { StudentModal } from "@/components/StudentModal";
 import { StudentProfileDrawer } from "@/components/StudentProfileDrawer";
-
-// ── Mock staff roster ────────────────────────────────────────────────────────
-const MOCK_STAFF: DovetUser[] = [
-  {
-    id: "admin-001",
-    fullName: "Dr. Elizabeth Vance",
-    email: "principal@dovetacademy.io",
-    role: "admin",
-    schoolName: "Dovet International Academy",
-    subdomain: "dovet-academy",
-    avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "teacher-001",
-    fullName: "Mrs. Olu Adebayo",
-    email: "o.adebayo@dovetacademy.io",
-    role: "teacher",
-    schoolName: "Dovet International Academy",
-    subdomain: "dovet-academy",
-    avatarUrl: "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?w=150&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "teacher-002",
-    fullName: "Mr. James Okafor",
-    email: "j.okafor@dovetacademy.io",
-    role: "teacher",
-    schoolName: "Dovet International Academy",
-    subdomain: "dovet-academy",
-    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "teacher-003",
-    fullName: "Ms. Claire Fontaine",
-    email: "c.fontaine@dovetacademy.io",
-    role: "teacher",
-    schoolName: "Dovet International Academy",
-    subdomain: "dovet-academy",
-    avatarUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "teacher-004",
-    fullName: "Mr. Kwame Mensah",
-    email: "k.mensah@dovetacademy.io",
-    role: "teacher",
-    schoolName: "Dovet International Academy",
-    subdomain: "dovet-academy",
-    avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
-  },
-];
+import { useAuth } from "@/lib/auth-context";
 
 // ── Role badge config ─────────────────────────────────────────────────────────
 const roleBadge: Record<string, { label: string; className: string; style?: React.CSSProperties }> = {
@@ -111,7 +63,9 @@ function StatCard({ icon: Icon, label, count, color }: { icon: React.ElementType
 }
 
 export const UsersAndStaff = () => {
+  const { user } = useAuth();
   const { students, addStudent, updateStudent, deleteStudent } = useStudents();
+  const staff = user ? [user] : [];
 
   const [search, setSearch] = useState("");
   const [selectedClass, setSelectedClass] = useState<string>("all");
@@ -146,7 +100,7 @@ export const UsersAndStaff = () => {
     return matchesSearch && matchesClass && matchesHouse && matchesGender;
   });
 
-  const filteredStaff = MOCK_STAFF.filter(
+  const filteredStaff = staff.filter(
     (u) =>
       !search.trim() ||
       u.fullName.toLowerCase().includes(search.toLowerCase()) ||
@@ -205,8 +159,8 @@ export const UsersAndStaff = () => {
 
       {/* Summary stats */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        <StatCard icon={Users} label="Total accounts" count={MOCK_STAFF.length + students.length} color="bg-[#F2F2F2] text-[#3C594E]" />
-        <StatCard icon={ShieldCheck} label="Staff & Teachers" count={MOCK_STAFF.length} color="bg-[#eaf1ef] text-[#3C594E]" />
+        <StatCard icon={Users} label="Total accounts" count={staff.length + students.length} color="bg-[#F2F2F2] text-[#3C594E]" />
+        <StatCard icon={ShieldCheck} label="Staff & Teachers" count={staff.length} color="bg-[#eaf1ef] text-[#3C594E]" />
         <StatCard icon={GraduationCap} label="Enrolled Students" count={students.length} color="bg-[#fdf3ee] text-[#BF8360]" />
       </div>
 

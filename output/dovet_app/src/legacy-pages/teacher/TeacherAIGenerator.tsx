@@ -3,48 +3,102 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import {
   Sparkles,
   Loader2,
   BookOpen,
-  CheckCircle2,
   Send,
-  Eye,
-  Edit3,
-  Calendar,
-  Layers,
-  HelpCircle,
   Clock,
-  ArrowRight,
-  ShieldCheck,
 } from "lucide-react";
 import { toast } from "sonner";
-import { CURRICULA, SUBJECTS, YEAR_GROUPS, type DovetUser, type LearnPack } from "@/lib/types";
+import { CURRICULA, SUBJECTS, YEAR_GROUPS, type DovetUser, type LearnPack, type LearnQuestion } from "@/lib/types";
 import { useNavigate } from "react-router-dom";
+import { addLearnPack, updateLearnPack } from "@/lib/learn-pack-store";
+import { createLearnPack, generateAiLearnPack, isLearnPackServiceUnavailable, setLearnPackStatus } from "@/lib/learn-pack-api";
+import { useAuth } from "@/lib/auth-context";
 
 interface Props {
   user: DovetUser;
 }
 
+type QuestionDraft = Omit<LearnQuestion, "isExample" | "exNum" | "clTopic" | "clIdx">;
+
+function buildQuestion(question: QuestionDraft, index: number, topic: string): LearnQuestion {
+  return {
+    ...question,
+    isExample: index === 0,
+    exNum: index === 0 ? 1 : 0,
+    clTopic: topic,
+    clIdx: (index % 4) as 0 | 1 | 2 | 3,
+  };
+}
+
+function buildChemistrySeparationQuestions(topic: string): LearnQuestion[] {
+  const questions: QuestionDraft[] = [
+    { text: "Which technique separates an insoluble solid such as sand from water?", hint: "The solid does not dissolve.", opts: ["Filtration", "Distillation", "Chromatography", "Evaporation"], correct: 0, why: "Filtration traps an insoluble solid in filter paper while the liquid passes through.", steps: ["Choose filtration for an insoluble solid and a liquid."] },
+    { text: "What is the liquid that passes through filter paper called?", hint: "It is collected underneath the funnel.", opts: ["Residue", "Filtrate", "Solute", "Solvent"], correct: 1, why: "The filtrate is the liquid that passes through the filter paper.", steps: ["Residue stays in the paper; filtrate passes through it."] },
+    { text: "Which method obtains salt from a salt-water solution?", hint: "Remove the water, leaving the dissolved solid behind.", opts: ["Evaporation", "Filtration", "Decanting", "Magnetism"], correct: 0, why: "Evaporation removes the water and leaves salt crystals behind.", steps: ["Heat the solution.", "Allow the water to evaporate."] },
+    { text: "Why is simple distillation suitable for obtaining pure water from seawater?", hint: "One part evaporates and is then cooled.", opts: ["Salt is magnetic", "Water can be evaporated then condensed", "Sand dissolves", "The filter paper makes water pure"], correct: 1, why: "Water evaporates at a lower temperature than salt and can be condensed into pure water.", steps: ["Evaporate water.", "Condense the vapour."] },
+    { text: "What property allows paper chromatography to separate ink dyes?", hint: "Different dyes move different distances.", opts: ["Their different solubilities", "Their magnetism", "Their mass only", "Their boiling points only"], correct: 0, why: "Dyes dissolve and travel at different rates because they have different solubilities and attractions to the paper.", steps: ["Place the sample above the solvent.", "Compare how far the dyes travel."] },
+    { text: "Which mixture is best separated with a magnet?", hint: "One material must be magnetic.", opts: ["Iron filings and sulfur", "Salt and water", "Oil and water", "Blue and red ink"], correct: 0, why: "Iron is magnetic, while sulfur is not, so a magnet can remove the iron filings.", steps: ["Bring a magnet close to the mixture.", "Collect the attracted iron filings."] },
+    { text: "Which apparatus is essential when filtering a mixture?", hint: "It holds back the insoluble solid.", opts: ["Filter paper", "Condenser", "Bunsen burner only", "Chromatography paper only"], correct: 0, why: "Filter paper has tiny pores that allow liquid through but retain insoluble particles.", steps: ["Fold filter paper into a funnel.", "Pour the mixture through it."] },
+    { text: "In chromatography, why must the solvent level start below the ink spot?", hint: "The sample needs to travel with the solvent, not dissolve into the starting pool.", opts: ["To prevent the ink dissolving directly into the solvent", "To make the paper heavier", "To stop evaporation", "To make dyes magnetic"], correct: 0, why: "If the spot starts below the solvent level, the sample dissolves into the solvent instead of separating up the paper.", steps: ["Draw the baseline in pencil.", "Keep the solvent below that line."] },
+    { text: "What is the residue in a filtration experiment?", hint: "It is the material left behind.", opts: ["The solid left on the filter paper", "The liquid collected in the beaker", "The water vapour", "The dissolved solid"], correct: 0, why: "The residue is the insoluble solid retained by the filter paper.", steps: ["Identify what remains on the filter paper."] },
+    { text: "Which technique is most suitable for separating oil and water?", hint: "The liquids form separate layers.", opts: ["A separating funnel", "Filtration", "Chromatography", "Evaporation to dryness"], correct: 0, why: "Oil and water are immiscible, so a separating funnel lets the denser water layer drain first.", steps: ["Allow the layers to settle.", "Drain the lower layer carefully."] },
+  ];
+
+  return [...questions, ...questions.map((question, index) => buildQuestion({
+    ...question,
+    text: `For a ${topic} investigation: ${question.text}`,
+  }, index + questions.length, topic))].map((question, index) =>
+    "isExample" in question ? question : buildQuestion(question, index, topic)
+  );
+}
+
+function buildTopicQuestions(subject: string, topic: string, count: number): LearnQuestion[] {
+  if (/chemistry/i.test(subject) && /separat|filtrat|distill|chromatograph|mixture/i.test(topic)) {
+    return buildChemistrySeparationQuestions(topic).slice(0, count);
+  }
+
+  const stems = [
+    ["What is the best description of", `A clear explanation of ${topic}`, "An unrelated fact", "A piece of equipment only", "A random guess"],
+    ["Which example best applies", `${topic} in a familiar context`, "Ignoring the topic", "Changing to another subject", "Using no evidence"],
+    ["Why is it useful to check your understanding of", `It helps you apply ${topic} accurately`, "It makes the work longer", "It removes the need to learn", "It guarantees every answer is correct"],
+    ["What should you do first when solving a problem about", `Identify the important information about ${topic}`, "Choose an answer at random", "Skip the question", "Copy an unrelated example"],
+  ] as const;
+
+  return Array.from({ length: count }, (_, index) => {
+    const [starter, correctAnswer, ...distractors] = stems[index % stems.length];
+    return buildQuestion({
+      text: `${starter} ${topic}?`,
+      hint: `Use the key ideas from ${topic}.`,
+      opts: [correctAnswer, ...distractors],
+      correct: 0,
+      why: `The correct choice uses the central ideas of ${topic} in ${subject}.`,
+      steps: [`Read the question carefully.`, `Connect the evidence to ${topic}.`],
+    }, index, topic);
+  });
+}
+
 export function TeacherAIGenerator({ user }: Props) {
   const navigate = useNavigate();
+  const { token } = useAuth();
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedPack, setGeneratedPack] = useState<LearnPack | null>(null);
 
   const [form, setForm] = useState({
-    subject: "ICT / Computer Science",
-    topic: "Algorithms & Flowcharts",
-    yearGroup: "Year 7",
+    subject: "",
+    topic: "",
+    yearGroup: "",
     curriculum: "Cambridge Lower Secondary",
     difficulty: "Standard",
     tone: "supportive",
     questionsPerPack: "20",
     timerSeconds: "60",
     validityDays: "7",
-    notes: "Focus on sequence, selection (IF/ELSE), and flowchart symbols with relatable everyday examples.",
+    notes: "",
   });
 
   const setField = (field: keyof typeof form, value: string) =>
@@ -63,6 +117,20 @@ export function TeacherAIGenerator({ user }: Props) {
     const due = new Date();
     due.setDate(due.getDate() + 7);
     const dueDateStr = due.toISOString().split("T")[0];
+
+    let questions: LearnQuestion[];
+    try {
+      questions = !token || token.startsWith("demo-token-")
+        ? buildTopicQuestions(form.subject, form.topic, parseInt(form.questionsPerPack) || 20)
+        : await generateAiLearnPack(token, {
+          subject: form.subject, topic: form.topic, yearGroup: form.yearGroup, curriculum: form.curriculum,
+          difficulty: form.difficulty, questionCount: parseInt(form.questionsPerPack) || 20, notes: form.notes,
+        });
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not generate learning-pack questions.");
+      setIsGenerating(false);
+      return;
+    }
 
     const newPack: LearnPack = {
       id: `pack-${Date.now()}`,
@@ -84,80 +152,70 @@ export function TeacherAIGenerator({ user }: Props) {
       status: "draft",
       completionStatus: "active",
       questionCount: parseInt(form.questionsPerPack) || 20,
-      questions: [
-        {
-          text: "What is an algorithm in computer science?",
-          hint: "Think about an unambiguous recipe or guide.",
-          opts: [
-            "A programming language like Python",
-            "A step-by-step set of precise instructions to solve a problem",
-            "A computer hardware component",
-            "An error found in code",
-          ],
-          correct: 1,
-          why: "An algorithm is an unambiguous, step-by-step procedure designed to perform a specific task or solve a defined problem.",
-          steps: [
-            "Step 1: Understand problem requirements.",
-            "Step 2: Follow sequential instructions to conclusion.",
-          ],
-          isExample: true,
-          exNum: 1,
-          clTopic: "Foundations",
-          clIdx: 0,
-        },
-        {
-          text: "Which flowchart shape universally represents a Decision / Condition (IF / ELSE)?",
-          hint: "Has multiple output branches (True/False).",
-          opts: ["Rectangle", "Diamond", "Oval / Terminator", "Parallelogram"],
-          correct: 1,
-          why: "In standard flowchart notation, a Diamond represents a decision with two or more output branches.",
-          steps: ["Step 1: Oval = Start/End.", "Step 2: Diamond = Decision condition."],
-          isExample: false,
-          exNum: 0,
-          clTopic: "Flowcharts",
-          clIdx: 1,
-        },
-        {
-          text: "What does a parallelogram represent in a flowchart?",
-          hint: "Think about user typing or screen printing.",
-          opts: ["Input or Output operation", "Start of the program", "Decision condition", "Loop counter"],
-          correct: 0,
-          why: "A parallelogram is used whenever data is entered (input) or displayed (output).",
-          steps: ["Step 1: Parallelograms indicate data entering or leaving the system."],
-          isExample: false,
-          exNum: 0,
-          clTopic: "Flowcharts",
-          clIdx: 2,
-        },
-        {
-          text: "Why must instructions in an algorithm be unambiguous?",
-          hint: "Computers do not guess what you mean.",
-          opts: [
-            "To make the code look longer",
-            "Because computers follow commands literally without guessing intent",
-            "To increase computer memory usage",
-            "To prevent humans from reading them",
-          ],
-          correct: 1,
-          why: "Computers lack human intuition and execute instructions strictly as written; any ambiguity causes unexpected behavior.",
-          steps: ["Step 1: Computers execute literally.", "Step 2: Unambiguous instructions guarantee reliability."],
-          isExample: false,
-          exNum: 0,
-          clTopic: "Foundations",
-          clIdx: 3,
-        },
-      ],
+      questions,
     };
 
     setGeneratedPack(newPack);
-    setIsGenerating(false);
-    toast.success(`Weekly ${form.subject} pack generated with 7-day validity window!`);
+    const packSummary = {
+      id: newPack.id,
+      title: newPack.title,
+      subject: newPack.subject,
+      topic: newPack.topic,
+      yearGroup: newPack.yearGroup,
+      curriculum: newPack.curriculum,
+      difficulty: newPack.difficulty,
+      status: "draft",
+      days: 7,
+      createdAt: newPack.createdAt,
+      assignedCount: 0,
+      completions: 0,
+      questions: newPack.questions,
+    };
+    try {
+      if (!token || token.startsWith("demo-token-")) {
+        addLearnPack(packSummary);
+      } else {
+        const savedPack = await createLearnPack(token, packSummary, {
+          timerSeconds: Number(form.timerSeconds) || 0,
+          validityDays: Number(form.validityDays) || 7,
+          notes: form.notes,
+          questionsPerPack: Number(form.questionsPerPack) || 20,
+          questions: newPack.questions,
+        });
+        setGeneratedPack({ ...newPack, id: savedPack.id });
+      }
+      toast.success(`Weekly ${form.subject} pack generated and saved as a draft.`);
+    } catch (error) {
+      if (isLearnPackServiceUnavailable(error)) {
+        addLearnPack(packSummary);
+        toast.warning("Learning-pack service is unavailable. The draft was saved locally on this device.");
+      } else {
+        setGeneratedPack(null);
+        toast.error(error instanceof Error ? error.message : "Could not save the learning pack.");
+      }
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
-  const handlePublishPack = () => {
+  const handlePublishPack = async () => {
     if (!generatedPack) return;
-    toast.success(`Weekly ${generatedPack.subject} pack published! Students will receive a 7-day reminder.`);
-    navigate("/teacher/learn-packs");
+    try {
+      if (!token || token.startsWith("demo-token-")) {
+        updateLearnPack(generatedPack.id, { status: "published" });
+      } else {
+        await setLearnPackStatus(token, generatedPack.id, "published");
+      }
+      toast.success(`Weekly ${generatedPack.subject} pack published! Students will receive a 7-day reminder.`);
+      navigate("/teacher/learn-packs");
+    } catch (error) {
+      if (isLearnPackServiceUnavailable(error)) {
+        updateLearnPack(generatedPack.id, { status: "published" });
+        toast.warning("Learning-pack service is unavailable. The publish status was saved locally.");
+      } else {
+        toast.error(error instanceof Error ? error.message : "Could not publish the learning pack.");
+      }
+    }
   };
 
   return (

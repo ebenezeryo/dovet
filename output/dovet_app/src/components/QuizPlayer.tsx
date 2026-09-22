@@ -58,6 +58,17 @@ export function QuizPlayer({ packId = "pack-ict-w4", mode = "learn" }: QuizPlaye
 
   const currentQ: LearnQuestion | undefined = questions[step];
 
+  if (!pack || !currentQ) {
+    return (
+      <div className="mx-auto max-w-xl py-20 text-center">
+        <BookOpen className="mx-auto mb-4 h-12 w-12 text-slate-300" />
+        <h1 className="text-2xl font-black text-slate-900">This learning pack is unavailable</h1>
+        <p className="mt-2 text-slate-500">Ask your teacher to generate and publish the pack again.</p>
+        <Button className="mt-6 rounded-xl" onClick={() => navigate("/student")}>Return to dashboard</Button>
+      </div>
+    );
+  }
+
   // Timer logic (only active on practice questions, not on walkthroughs, and not when explanation is showing)
   useEffect(() => {
     if (!currentQ || currentQ.isExample || showExplanation || !timerActive) return;

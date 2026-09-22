@@ -7,23 +7,20 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { DovetUser } from "@/lib/types";
+import { getLearnPacks } from "@/lib/learn-pack-store";
 
 interface Props { user: DovetUser; }
 
 export function TeacherHome({ user }: Props) {
+  const packs = getLearnPacks();
   const stats = [
-    { label: "Assigned Students", value: "142", icon: Users,     color: "text-[#3C594E]", bg: "bg-[#eaf1ef]", trend: "+4" },
-    { label: "Active Learn Packs", value: "8",  icon: BookOpen,  color: "text-[#3C594E]", bg: "bg-[#e8f9f0]", trend: "+2" },
-    { label: "Pending Exams",      value: "3",  icon: FileText,  color: "text-[#BF8360]", bg: "bg-[#fdf3ee]", trend: "" },
-    { label: "Class Average",      value: "74%",icon: TrendingUp, color: "text-[#3C594E]", bg: "bg-[#F2F2F2]", trend: "↑3%" },
+    { label: "Assigned Students", value: String(packs.reduce((sum, pack) => sum + pack.assignedCount, 0)), icon: Users, color: "text-[#3C594E]", bg: "bg-[#eaf1ef]", trend: "" },
+    { label: "Active Learn Packs", value: String(packs.filter((pack) => pack.status !== "archived").length), icon: BookOpen, color: "text-[#3C594E]", bg: "bg-[#e8f9f0]", trend: "" },
+    { label: "Pending Exams", value: "0", icon: FileText, color: "text-[#BF8360]", bg: "bg-[#fdf3ee]", trend: "" },
+    { label: "Class Average", value: "—", icon: TrendingUp, color: "text-[#3C594E]", bg: "bg-[#F2F2F2]", trend: "" },
   ];
 
-  const recentActivity = [
-    { text: "Chloe completed Monday Algorithms quiz",  time: "2m ago",   icon: CheckCircle2, color: "text-[#3C594E]" },
-    { text: "Year 7 ICT Learn Pack published",         time: "1h ago",   icon: BookOpen,     color: "text-[#3C594E]" },
-    { text: "Biology Midterm exam scheduled",          time: "3h ago",   icon: FileText,     color: "text-[#BF8360]" },
-    { text: "5 new students submitted Science quiz",   time: "Yesterday",icon: CheckCircle2, color: "text-[#3C594E]" },
-  ];
+  const recentActivity = packs.slice(0, 4).map((pack) => ({ text: `${pack.title} ${pack.status}`, time: pack.createdAt, icon: BookOpen, color: "text-[#3C594E]" }));
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -124,6 +121,7 @@ export function TeacherHome({ user }: Props) {
                 </div>
               </div>
             ))}
+            {recentActivity.length === 0 && <p className="py-4 text-center text-sm text-slate-500">No learning-pack activity yet.</p>}
             <Link to="/teacher/analytics">
               <Button variant="ghost" className="w-full rounded-2xl font-bold text-slate-400 text-sm mt-2">
                 View all activity →

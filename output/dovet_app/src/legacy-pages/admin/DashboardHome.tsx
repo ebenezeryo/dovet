@@ -46,6 +46,7 @@ import { countries, states as allStates, lgas as allLgas } from "@/lib/location-
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth-context";
 import { useStudents } from "@/lib/student-store";
+import { getLearnPacks } from "@/lib/learn-pack-store";
 import { StudentModal } from "@/components/StudentModal";
 import type { StudentRecord } from "@/lib/types";
 
@@ -54,11 +55,7 @@ export const DashboardHome = () => {
   const { students, addStudent, importStudents } = useStudents();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [dashboardStats, setDashboardStats] = useState({
-    exams: 18,
-    staff: 24,
-    submissions: 1350,
-  });
+  const packs = getLearnPacks();
 
   // Comprehensive 34-Field Add Student Modal
   const [studentModalOpen, setStudentModalOpen] = useState(false);
@@ -86,13 +83,7 @@ export const DashboardHome = () => {
   const [examDialogOpen, setExamDialogOpen] = useState(false);
 
   // Recent Submissions Feed
-  const [submissions] = useState([
-    { id: "s1", student: "Jack Sterling", exam: "Algorithms — Week 4 Practice", score: "15/16 (94%)", grade: "A", time: "5 mins ago", status: "graded" },
-    { id: "s2", student: "Chloe Adeyemi", exam: "Biology Unit Evaluation", score: "44/50 (88%)", grade: "A", time: "18 mins ago", status: "graded" },
-    { id: "s3", student: "Daniel Adeyemi", exam: "Multiplication Mastery Week 2", score: "12/16 (75%)", grade: "B", time: "1 hour ago", status: "graded" },
-    { id: "s4", student: "Sarah Jenkins", exam: "ICT Midterm Exam", score: "Pending Review", grade: "-", time: "2 hours ago", status: "pending" },
-    { id: "s5", student: "Emmanuel Okafor", exam: "Newton's Laws Physics Test", score: "48/50 (96%)", grade: "A+", time: "3 hours ago", status: "graded" },
-  ]);
+  const submissions: Array<{ id: string; student: string; exam: string; score: string; grade: string; time: string; status: string }> = [];
 
   const handleDownloadCsvTemplate = () => {
     const headers = [
@@ -132,7 +123,7 @@ export const DashboardHome = () => {
       "MOTHER'S CONTACT ADDRESS",
     ].join(",");
 
-    const sampleRow = [
+    const sampleRow = ""; /* Legacy sample row intentionally excluded from downloads.
       "2026/SEC/101",
       "Sterling",
       "Alexander",
@@ -167,7 +158,7 @@ export const DashboardHome = () => {
       "grace@medhealth.ng",
       "First Cardiology",
       "14 Admiralty Way Lekki",
-    ].join(",");
+    ].join(","); */
 
     const csvContent = "data:text/csv;charset=utf-8," + headers + "\n" + sampleRow + "\n";
     const encodedUri = encodeURI(csvContent);
@@ -272,11 +263,6 @@ export const DashboardHome = () => {
     setIsCreatingExam(true);
     await new Promise((r) => setTimeout(r, 800));
 
-    setDashboardStats((prev) => ({
-      ...prev,
-      exams: (prev.exams || 0) + 1,
-    }));
-
     setIsCreatingExam(false);
     setExamDialogOpen(false);
     toast.success(`Exam '${examForm.title}' created and scheduled!`);
@@ -349,9 +335,9 @@ export const DashboardHome = () => {
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         {[
           { label: "Enrolled Students", val: students.length, icon: Users,       color: "text-[#3C594E]", bg: "bg-[#eaf1ef] border-[#c8dcd5]" },
-          { label: "Active Faculty",    val: dashboardStats.staff,    icon: ShieldCheck,  color: "text-[#3C594E]", bg: "bg-[#e8f9f0] border-[#b2eccf]" },
-          { label: "Scheduled Exams",   val: dashboardStats.exams,    icon: FileText,     color: "text-[#BF8360]", bg: "bg-[#fdf3ee] border-[#e8c4a8]" },
-          { label: "Weekly Submissions",val: dashboardStats.submissions,icon: TrendingUp, color: "text-[#0D0D0D]", bg: "bg-[#F2F2F2] border-[#d8d8d8]" },
+          { label: "Active Faculty",    val: user ? 1 : 0,            icon: ShieldCheck,  color: "text-[#3C594E]", bg: "bg-[#e8f9f0] border-[#b2eccf]" },
+          { label: "Published Packs",   val: packs.filter((pack) => pack.status === "published").length, icon: BookOpen, color: "text-[#BF8360]", bg: "bg-[#fdf3ee] border-[#e8c4a8]" },
+          { label: "Weekly Submissions",val: 0,                         icon: TrendingUp, color: "text-[#0D0D0D]", bg: "bg-[#F2F2F2] border-[#d8d8d8]" },
         ].map((kpi, idx) => (
           <Card key={idx} className="border border-slate-200 shadow-sm rounded-3xl p-5 space-y-3" style={{ backgroundColor: '#ffffff' }}>
             <div className="flex items-center justify-between">
@@ -375,7 +361,7 @@ export const DashboardHome = () => {
             <p className="text-xs text-slate-500 font-normal mt-0.5">Live activity stream across your institution</p>
           </div>
           <Badge className="font-semibold text-xs border" style={{ backgroundColor: '#eaf1ef', color: '#3C594E', borderColor: '#c8dcd5' }}>
-            Live Syncing
+            No submissions yet
           </Badge>
         </div>
 
@@ -398,6 +384,7 @@ export const DashboardHome = () => {
               </div>
             </div>
           ))}
+          {submissions.length === 0 && <p className="py-8 text-center text-sm text-slate-500">No student submissions have been recorded yet.</p>}
         </div>
       </Card>
 
@@ -424,7 +411,7 @@ export const DashboardHome = () => {
             <div className="flex items-center justify-between p-4 rounded-2xl" style={{ backgroundColor: '#eaf1ef', border: '1px solid #c8dcd5' }}>
               <div>
                 <div className="text-xs font-bold" style={{ color: '#2a3f38' }}>Need the CSV Template?</div>
-                <p className="text-[11px] mt-0.5" style={{ color: '#3C594E' }}>Download our pre-formatted spreadsheet template with sample rows.</p>
+                <p className="text-[11px] mt-0.5" style={{ color: '#3C594E' }}>Download an empty 34-field spreadsheet template for your school records.</p>
               </div>
               <Button
                 type="button"

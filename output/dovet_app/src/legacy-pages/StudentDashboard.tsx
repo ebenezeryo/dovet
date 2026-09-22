@@ -34,7 +34,7 @@ import { AssessmentModeBadge } from "@/components/AssessmentModeBadge";
 import { GradeBadge } from "@/components/GradeBadge";
 import { StudentProgress } from "./student/StudentProgress";
 import { useAuth } from "@/lib/auth-context";
-import { WEEKLY_SUBJECT_PACKS } from "@/lib/learn-packs-data";
+import { getDemoAssignedPacks } from "@/lib/learn-packs-data";
 import { NotificationBell } from "@/components/NotificationBell";
 
 const navItems = [
@@ -56,16 +56,18 @@ const BADGES = [
 function StudentHome({ user }: { user: DovetUser }) {
   const navigate = useNavigate();
   const [filterTab, setFilterTab] = useState<"all" | "due_soon" | "active" | "completed">("all");
+  const packs = getDemoAssignedPacks();
+  const greeting = new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 18 ? "Good afternoon" : "Good evening";
 
-  const completedPacks = WEEKLY_SUBJECT_PACKS.filter((p) => p.completionStatus === "completed");
-  const dueSoonPacks = WEEKLY_SUBJECT_PACKS.filter((p) => p.completionStatus === "due_soon");
-  const activePacks = WEEKLY_SUBJECT_PACKS.filter((p) => p.completionStatus === "active");
+  const completedPacks = packs.filter((p) => p.completionStatus === "completed");
+  const dueSoonPacks = packs.filter((p) => p.completionStatus === "due_soon");
+  const activePacks = packs.filter((p) => p.completionStatus === "active");
 
-  const completionPct = Math.round((completedPacks.length / WEEKLY_SUBJECT_PACKS.length) * 100);
+  const completionPct = packs.length ? Math.round((completedPacks.length / packs.length) * 100) : 0;
 
   const displayedPacks =
     filterTab === "all"
-      ? WEEKLY_SUBJECT_PACKS
+      ? packs
       : filterTab === "due_soon"
       ? dueSoonPacks
       : filterTab === "active"
@@ -83,7 +85,7 @@ function StudentHome({ user }: { user: DovetUser }) {
               Week 4 Learning Cycle · Term 1
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
-              Good morning, {user.fullName.split(" ")[0]}
+              {greeting}, {user.fullName.split(" ")[0]}
             </h1>
             <p className="text-sm font-normal max-w-xl leading-relaxed" style={{ color: 'rgba(242,242,242,0.85)' }}>
               You have <span className="text-white font-semibold">{dueSoonPacks.length} subject packs closing soon</span>. Each pack is active for 7 days from publication.
@@ -91,7 +93,8 @@ function StudentHome({ user }: { user: DovetUser }) {
           </div>
           <div className="flex items-center gap-3">
             <Button
-              onClick={() => navigate("/player/learn/pack-ict-w4")}
+              onClick={() => packs[0] && navigate(`/player/learn/${packs[0].id}`)}
+              disabled={!packs[0]}
               className="rounded-2xl font-semibold text-white shadow-md gap-2 h-11 px-5 text-sm transition-all"
               style={{ backgroundColor: '#3C594E' }}
             >
@@ -141,7 +144,7 @@ function StudentHome({ user }: { user: DovetUser }) {
                 </Badge>
               </div>
               <p className="text-xs text-slate-500 font-normal mt-1">
-                Completed <span className="font-semibold text-slate-900">{completedPacks.length}</span> of {WEEKLY_SUBJECT_PACKS.length} active subject packs ({completionPct}%)
+                Completed <span className="font-semibold text-slate-900">{completedPacks.length}</span> of {packs.length} active subject packs ({completionPct}%)
               </p>
             </div>
             <div className="text-right">
@@ -194,7 +197,7 @@ function StudentHome({ user }: { user: DovetUser }) {
                 filterTab === "all" ? "bg-white text-slate-900 shadow-sm" : "text-slate-600 hover:text-slate-900"
               )}
             >
-              All ({WEEKLY_SUBJECT_PACKS.length})
+              All ({packs.length})
             </button>
             <button
               onClick={() => setFilterTab("due_soon")}
@@ -337,6 +340,7 @@ function StudentHome({ user }: { user: DovetUser }) {
 // ── Weekly Packs Tab ─────────────────────────────────────────────────────────
 function StudentLearnPacksTab({ user }: { user: DovetUser }) {
   const navigate = useNavigate();
+  const packs = getDemoAssignedPacks();
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       <div>
@@ -347,7 +351,7 @@ function StudentLearnPacksTab({ user }: { user: DovetUser }) {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {WEEKLY_SUBJECT_PACKS.map((pack) => (
+        {packs.map((pack) => (
           <Card key={pack.id} className="border border-slate-200/70 shadow-sm hover:border-slate-300 hover:shadow-md transition-all rounded-3xl bg-white">
             <CardContent className="p-6 space-y-4">
               <div className="flex items-start justify-between gap-3">

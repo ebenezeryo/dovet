@@ -1,4 +1,5 @@
 import type { LearnPack, LearnQuestion, StudentNotification } from "./types";
+import { getLearnPacks } from "./learn-pack-store";
 
 export const WEEKLY_SUBJECT_PACKS: LearnPack[] = [
   {
@@ -330,6 +331,33 @@ export const WEEKLY_SUBJECT_PACKS: LearnPack[] = [
   },
 ];
 
+/** Published packs created in the shared demo are the student's assigned packs. */
+export function getDemoAssignedPacks(): LearnPack[] {
+  return getLearnPacks()
+    .filter((pack) => pack.status === "published" && (pack.questions?.length ?? 0) > 0)
+    .map((pack): LearnPack => ({
+      id: pack.id,
+      title: pack.title,
+      subject: pack.subject,
+      topic: pack.topic,
+      yearGroup: pack.yearGroup,
+      curriculum: pack.curriculum,
+      difficulty: pack.difficulty as LearnPack["difficulty"],
+      teacherName: "Your teacher",
+      agencyName: "Dovet Demo School",
+      weekNumber: 1,
+      createdAt: pack.createdAt,
+      publishedAt: pack.createdAt,
+      dueDate: pack.createdAt,
+      durationDays: pack.days,
+      daysRemaining: pack.days,
+      status: "published",
+      completionStatus: "active",
+      questionCount: pack.questions?.length ?? 0,
+      questions: pack.questions ?? [],
+    }));
+}
+
 export const STUDENT_NOTIFICATIONS: StudentNotification[] = [
   {
     id: "notif-1",
@@ -376,7 +404,7 @@ export const STUDENT_NOTIFICATIONS: StudentNotification[] = [
 ];
 
 export function getPackById(packId: string): LearnPack | undefined {
-  return WEEKLY_SUBJECT_PACKS.find((p) => p.id === packId) || WEEKLY_SUBJECT_PACKS[0];
+  return getDemoAssignedPacks().find((p) => p.id === packId);
 }
 
 export function getAllQuestionsForPack(packId: string): LearnQuestion[] {
@@ -384,5 +412,5 @@ export function getAllQuestionsForPack(packId: string): LearnQuestion[] {
   if (pack && pack.questions && pack.questions.length > 0) {
     return pack.questions;
   }
-  return WEEKLY_SUBJECT_PACKS[0].questions;
+  return [];
 }

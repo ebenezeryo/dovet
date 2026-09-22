@@ -5,7 +5,9 @@ import { calculateAgeBySept } from "./types";
 const STORAGE_KEY = "dovet_students_records_v1";
 const EVENT_NAME = "dovet_students_updated";
 
-export const INITIAL_STUDENTS: StudentRecord[] = [
+export const INITIAL_STUDENTS: StudentRecord[] = [];
+
+/* Legacy demonstration records retained only for migration reference; they are not loaded at runtime.
   {
     id: "student-001",
     admissionNumber: "2026/SEC/001",
@@ -334,7 +336,7 @@ export const INITIAL_STUDENTS: StudentRecord[] = [
     enrolledAt: "01/09/2025",
     status: "Active",
   },
-];
+]; */
 
 export function getStoredStudents(): StudentRecord[] {
   if (typeof window === "undefined") return INITIAL_STUDENTS;

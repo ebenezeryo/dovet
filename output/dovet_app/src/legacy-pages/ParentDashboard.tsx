@@ -37,7 +37,7 @@ import type { DovetUser, GradeResult } from "@/lib/types";
 import { AssessmentModeBadge } from "@/components/AssessmentModeBadge";
 import { GradeBadge } from "@/components/GradeBadge";
 import { useAuth } from "@/lib/auth-context";
-import { WEEKLY_SUBJECT_PACKS } from "@/lib/learn-packs-data";
+import { getDemoAssignedPacks } from "@/lib/learn-packs-data";
 
 const navItems = [
   { name: "Overview", icon: LayoutDashboard, href: "/parent" },
@@ -86,6 +86,7 @@ const CHILDREN_DATA = [
 ];
 
 function ParentOverview({ child, onOpenReport }: { child: typeof CHILDREN_DATA[0]; onOpenReport: () => void }) {
+  const packs = getDemoAssignedPacks();
   const completionPct = Math.round((child.completedSubjectPacks / child.totalSubjectPacks) * 100);
 
   return (
@@ -161,7 +162,7 @@ function ParentOverview({ child, onOpenReport }: { child: typeof CHILDREN_DATA[0
       <div className="space-y-4">
         <h3 className="text-lg font-bold text-slate-900 tracking-tight">Weekly Subject Packs Status (Week 4)</h3>
         <div className="grid gap-3 sm:grid-cols-2">
-          {WEEKLY_SUBJECT_PACKS.slice(0, 6).map((pack) => (
+          {packs.slice(0, 6).map((pack) => (
             <div
               key={pack.id}
               className="p-4 rounded-2xl bg-white border border-slate-200/70 shadow-xs flex items-center justify-between gap-3"
