@@ -73,7 +73,7 @@ export function TeacherClasses({ user }: Props) {
                   <Users className={cn("h-5 w-5", cls.iconColor)} />
                 </div>
                 {selectedClass === cls.id && (
-                  <Badge className="bg-primary text-white border-none text-[10px] font-bold">Active</Badge>
+                  <Badge className="text-white border-none text-[10px] font-bold" style={{ backgroundColor: '#3C594E' }}>Active</Badge>
                 )}
               </div>
               <h3 className="font-black text-slate-900 text-base leading-tight">{cls.name}</h3>

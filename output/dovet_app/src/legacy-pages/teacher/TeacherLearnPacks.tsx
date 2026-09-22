@@ -41,7 +41,7 @@ function PackList({ user }: Props) {
           <p className="text-slate-500 font-medium mt-1">AI-generated formative learning packs for your classes</p>
         </div>
         <Link to="/teacher/learn-packs/new">
-          <Button className="gap-2 shadow-lg shadow-primary/20 font-bold">
+          <Button className="gap-2 font-bold text-white shadow-sm" style={{ backgroundColor: '#3C594E' }}>
             <Sparkles className="h-4 w-4" /> Generate New Pack
           </Button>
         </Link>
@@ -59,7 +59,9 @@ function PackList({ user }: Props) {
           <h3 className="font-black text-slate-700 text-lg">No packs yet</h3>
           <p className="text-slate-400 mb-6">Generate your first AI learn pack to get started</p>
           <Link to="/teacher/learn-packs/new">
-            <Button className="gap-2"><Sparkles className="h-4 w-4" /> Generate Pack</Button>
+            <Button className="gap-2 font-bold text-white shadow-sm" style={{ backgroundColor: '#3C594E' }}>
+              <Sparkles className="h-4 w-4" /> Generate Pack
+            </Button>
           </Link>
         </div>
       ) : (
@@ -267,7 +269,8 @@ function NewPackForm({ user }: Props) {
             </div>
           </div>
 
-          <Button className="w-full h-12 rounded-2xl font-black gap-2 shadow-lg shadow-primary/20 text-base"
+          <Button className="w-full h-12 rounded-2xl font-black gap-2 text-base text-white shadow-sm"
+            style={{ backgroundColor: '#3C594E' }}
             onClick={handleGenerate} disabled={isGenerating}>
             {isGenerating ? <><Loader2 className="h-5 w-5 animate-spin" /> Generating...</> : <><Sparkles className="h-5 w-5" /> Generate Pack</>}
           </Button>

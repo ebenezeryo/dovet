@@ -141,6 +141,12 @@ body {
   background-color: #ffffff !important;
 }
 
+/* Default Button variant — always forest green regardless of CSS variable resolution.
+   Targets any button rendered by shadcn that has no explicit bg- override. */
+button[data-slot="button"].text-white:not([style*="background"]) {
+  background-color: #3C594E;
+}
+
 /* Display headings use Plus Jakarta Sans for personality */
 h1, h2, h3 {
   font-family: var(--font-display);

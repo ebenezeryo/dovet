@@ -43,7 +43,7 @@ export function TeacherHome({ user }: Props) {
             <span className="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full border-2 border-white" />
           </Button>
           <Link to="/teacher/learn-packs/new">
-            <Button className="rounded-xl shadow-lg shadow-primary/25 font-bold gap-2">
+            <Button className="rounded-xl font-bold gap-2 text-white shadow-sm" style={{ backgroundColor: '#3C594E' }}>
               <Sparkles className="h-4 w-4" /> New Learn Pack
             </Button>
           </Link>

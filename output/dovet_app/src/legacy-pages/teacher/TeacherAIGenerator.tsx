@@ -266,10 +266,10 @@ export function TeacherAIGenerator({ user }: Props) {
             </div>
 
             <Button
+              className="w-full h-12 rounded-2xl font-bold text-white shadow-sm gap-2"
+              style={{ backgroundColor: '#3C594E' }}
               onClick={handleGenerate}
-              disabled={isGenerating}
-              className="w-full h-12 rounded-2xl font-bold bg-primary text-white shadow-lg shadow-primary/20 gap-2"
-            >
+              disabled={isGenerating}>
               {isGenerating ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" /> Generating Weekly Pack...

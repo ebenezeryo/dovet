@@ -43,7 +43,7 @@ function ExamList({ user }: Props) {
           <p className="text-slate-500 font-medium mt-1">Summative assessments for your classes</p>
         </div>
         <Link to="/teacher/exams/new">
-          <Button className="gap-2 font-bold shadow-lg shadow-primary/20">
+          <Button className="gap-2 font-bold text-white shadow-sm" style={{ backgroundColor: '#3C594E' }}>
             <Plus className="h-4 w-4" /> Create Exam
           </Button>
         </Link>
